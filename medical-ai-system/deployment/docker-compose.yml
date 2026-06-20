@@ -1,0 +1,79 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: medical_mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: medical_ai
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_USER: medical_user
+      MYSQL_PASSWORD: medical_pass
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - medical_network
+
+  laravel:
+    build:
+      context: ../backend-laravel
+      dockerfile: ../deployment/laravel/Dockerfile
+    container_name: medical_laravel
+    restart: unless-stopped
+    depends_on:
+      - mysql
+    environment:
+      APP_ENV: production
+      APP_DEBUG: false
+      DB_CONNECTION: mysql
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_DATABASE: medical_ai
+      DB_USERNAME: medical_user
+      DB_PASSWORD: medical_pass
+      AI_SERVICE_URL: http://fastapi:8000
+    volumes:
+      - laravel_storage:/var/www/storage/app/public
+      - ../backend-laravel:/var/www
+    networks:
+      - medical_network
+
+  nginx:
+    image: nginx:alpine
+    container_name: medical_nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ../backend-laravel:/var/www
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - laravel
+    networks:
+      - medical_network
+
+  fastapi:
+    build:
+      context: ..
+      dockerfile: deployment/fastapi/Dockerfile
+    container_name: medical_fastapi
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    volumes:
+      - ../models:/app/models
+      - ../ai-service:/app
+    networks:
+      - medical_network
+
+volumes:
+  mysql_data:
+  laravel_storage:
+
+networks:
+  medical_network:
+    driver: bridge

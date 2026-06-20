@@ -1,0 +1,45 @@
+# Laravel
+backend-laravel/vendor/
+backend-laravel/node_modules/
+backend-laravel/.env
+backend-laravel/.env.*
+backend-laravel/public/build/
+backend-laravel/public/hot
+backend-laravel/public/storage/
+backend-laravel/storage/*.key
+backend-laravel/storage/pail/
+backend-laravel/.phpunit.cache
+backend-laravel/.phpunit.result.cache
+
+# Python / AI
+ai-service/venv/
+ai-service/__pycache__/
+__pycache__/
+*.pyc
+
+# IDE
+.idea/
+.vscode/
+.fleet/
+.nova/
+.zed/
+*.swp
+*.swo
+
+# OS
+Thumbs.db
+.DS_Store
+
+# Logs
+*.log
+
+# AI Service logs (sensitive paths)
+ai-service/server_out.txt
+ai-service/server_err.txt
+
+# Archives (sensitive / unnecessary)
+archive.zip
+
+# Test files
+test_ultrasound.jpg
+test_*.jpg

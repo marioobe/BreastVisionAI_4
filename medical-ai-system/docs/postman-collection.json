@@ -1,0 +1,183 @@
+{
+  "info": {
+    "name": "OsteoScan AI — API",
+    "description": "REST API untuk Sistem Klasifikasi Citra Medis menggunakan MobileNetV2 + Laravel + FastAPI",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "base_url", "value": "http://127.0.0.1:8000" },
+    { "key": "token", "value": "" }
+  ],
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/api/login",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"email\": \"admin@medical-ai.com\", \"password\": \"password\"}"
+            }
+          }
+        },
+        {
+          "name": "Me",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/api/me",
+            "header": [{"key": "Authorization", "value": "Bearer {{token}}"}]
+          }
+        },
+        {
+          "name": "Logout",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/api/logout",
+            "header": [{"key": "Authorization", "value": "Bearer {{token}}"}]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Models",
+      "item": [
+        {
+          "name": "Get All Models",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/api/models",
+            "header": [{"key": "Authorization", "value": "Bearer {{token}}"}]
+          }
+        },
+        {
+          "name": "Create Model",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/api/models",
+            "header": [{"key": "Authorization", "value": "Bearer {{token}}"}],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {"key": "name", "value": "MobileNetV2 v1", "type": "text"},
+                {"key": "version", "value": "1.0.0", "type": "text"},
+                {"key": "model_file", "type": "file", "src": ""}
+              ]
+            }
+          }
+        },
+        {
+          "name": "Update Model",
+          "request": {
+            "method": "PUT",
+            "url": "{{base_url}}/api/models/1",
+            "header": [{"key": "Authorization", "value": "Bearer {{token}}"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"name\": \"Model Updated\", \"version\": \"1.1.0\"}"
+            }
+          }
+        },
+        {
+          "name": "Activate Model",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/api/models/1/activate",
+            "header": [{"key": "Authorization", "value": "Bearer {{token}}"}]
+          }
+        },
+        {
+          "name": "Delete Model",
+          "request": {
+            "method": "DELETE",
+            "url": "{{base_url}}/api/models/1",
+            "header": [{"key": "Authorization", "value": "Bearer {{token}}"}]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Predictions",
+      "item": [
+        {
+          "name": "Predict (API)",
+          "request": {
+            "method": "POST",
+            "url": "{{base_url}}/api/predict",
+            "header": [{"key": "Authorization", "value": "Bearer {{token}}"}],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {"key": "nik", "value": "1234567890123456", "type": "text"},
+                {"key": "name", "value": "Pasien Contoh", "type": "text"},
+                {"key": "gender", "value": "P", "type": "text"},
+                {"key": "date_of_birth", "value": "1990-01-15", "type": "text"},
+                {"key": "image", "type": "file", "src": ""}
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get All Predictions",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/api/predictions",
+            "header": [{"key": "Authorization", "value": "Bearer {{token}}"}]
+          }
+        },
+        {
+          "name": "Get Prediction Detail",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/api/predictions/1",
+            "header": [{"key": "Authorization", "value": "Bearer {{token}}"}]
+          }
+        },
+        {
+          "name": "Delete Prediction",
+          "request": {
+            "method": "DELETE",
+            "url": "{{base_url}}/api/predictions/1",
+            "header": [{"key": "Authorization", "value": "Bearer {{token}}"}]
+          }
+        },
+        {
+          "name": "Dashboard",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/api/dashboard",
+            "header": [{"key": "Authorization", "value": "Bearer {{token}}"}]
+          }
+        }
+      ]
+    },
+    {
+      "name": "AI Service (FastAPI)",
+      "item": [
+        {
+          "name": "Health Check",
+          "request": {
+            "method": "GET",
+            "url": "http://127.0.0.1:8000/health"
+          }
+        },
+        {
+          "name": "Predict (FastAPI)",
+          "request": {
+            "method": "POST",
+            "url": "http://127.0.0.1:8000/predict",
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {"key": "file", "type": "file", "src": ""}
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
